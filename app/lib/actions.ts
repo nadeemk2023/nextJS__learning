@@ -10,10 +10,10 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({
-    invalid_type_error: "Please select a customer",
+    invalid_type_error: "Please select a customer.",
   }),
   amount: z.coerce.number().gt(0, {
-    message: "Please enter an amount greater than 0",
+    message: "Please enter an amount greater than 0.",
   }),
   status: z.enum(["pending", "paid"], {
     invalid_type_error: "Please select an invoice status.",
@@ -57,7 +57,9 @@ export async function createInvoice(prevState: State, formData: FormData) {
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date) VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
   } catch (error) {
-    console.error("Error creating invoice:", error);
+    return {
+      message: "Database error: Failed to Create Invoice.",
+    };
   }
 
   revalidatePath("dashboard/invoices");
