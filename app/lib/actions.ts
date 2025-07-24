@@ -80,7 +80,6 @@ export async function updateInvoice(
   });
 
   if (!validatedFields.success) {
-    console.log(prevState);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Missing Fields. Failed to Update Invoice.",
